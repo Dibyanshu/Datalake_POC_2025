@@ -18,8 +18,6 @@ interface WidgetDataForPanel {
     chartConfig?: ChartConfiguration;
 }
 
-// Helper function to convert RGBA to HEX (simplified, doesn't handle all edge cases or alpha)
-// A more robust library might be needed for perfect conversion including alpha.
 function rgbaToHex(rgba: string): string {
     if (rgba.startsWith('#')) return rgba; // Already hex
     if (!rgba.startsWith('rgba')) return '#000000'; // Default if not rgba or hex
@@ -111,7 +109,15 @@ export class ChartConfigPanel {
             this.datasetLabelInput.value = firstDataset?.label || '';
 
             // Populate slice/bar selector
-            this.populateSliceSelector(firstDataset?.data?.length || 0, chart.data.labels);
+            this.populateSliceSelector(
+                firstDataset?.data?.length || 0,
+                Array.isArray(chart.data.labels)
+                    ? chart.data.labels.filter(
+                        (l): l is string | number | Date =>
+                            typeof l === 'string' || typeof l === 'number' || l instanceof Date
+                    )
+                    : undefined
+            );
 
             // Show/hide slice selector based on chart type
             // Useful for Pie, Doughnut, and potentially Bar charts if we want individual bar styling
@@ -126,7 +132,7 @@ export class ChartConfigPanel {
 
 
             const yScales = chart.options?.scales?.y;
-            this.yAxisBeginAtZeroInput.checked = yScales?.beginAtZero || false;
+            this.yAxisBeginAtZeroInput.checked = typeof (yScales as any)?.beginAtZero === 'boolean' ? (yScales as any).beginAtZero : false;
 
             if (chart.type === 'doughnut' || chart.type === 'pie') {
                 this.yAxisBeginAtZeroInput.disabled = true;
@@ -213,13 +219,23 @@ export class ChartConfigPanel {
         this.datasetBorderColorInput.value = currentBorderColor;
     }
 
-    private getColorValue(color: string | string[] | undefined): string {
-        // This helper is now less critical for the color picker directly,
-        // but still useful for getting the initial raw color string.
+    private getColorValue(
+        color:
+            | string
+            | string[]
+            | undefined
+            | ((...args: any[]) => any)
+            | object
+            | null
+    ): string {
+        // Only handle string or string[]; otherwise return empty string
         if (Array.isArray(color)) {
             return color[0] || '';
         }
-        return (color as string) || '';
+        if (typeof color === 'string') {
+            return color;
+        }
+        return '';
     }
 
     private handleSubmit(event: SubmitEvent): void {

@@ -26,7 +26,6 @@ vite-ts-datalake-dashboard/
     ├── main.ts                # Main dashboard logic and entry point
     ├── chartPanelConfig.ts    # Offcanvas panel for widget/chart configuration
     ├── dashboardWidgetConfig.ts # Default widget definitions
-    ├── counter.ts             # Example counter utility
     ├── style.css              # Custom styles
     ├── vite-env.d.ts
     ├── typescript.svg
@@ -45,7 +44,7 @@ vite-ts-datalake-dashboard/
 
 1. **Clone the repository:**
    ```sh
-   git clone <your-repo-url>
+   git clone https://github.com/your-username/vite-ts-datalake-dashboard.git
    cd vite-ts-datalake-dashboard
    ```
 

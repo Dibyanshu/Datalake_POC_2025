@@ -219,7 +219,11 @@ function handlePanelApply(widgetId: string, updates: PanelWidgetUpdate): void {
         if (updates.yAxisBeginAtZero !== undefined &&
             chartConfig.type !== 'doughnut' &&
             chartConfig.type !== 'pie') {
-            chartConfig.options.scales.y.beginAtZero = updates.yAxisBeginAtZero;
+            // Chart.js v3+ supports multiple scale types; set beginAtZero only for linear scale
+            if (!chartConfig.options.scales.y) {
+                chartConfig.options.scales.y = {};
+            }
+            (chartConfig.options.scales.y as any).beginAtZero = updates.yAxisBeginAtZero;
         }
     }
 
