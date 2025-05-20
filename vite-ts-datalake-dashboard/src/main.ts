@@ -1,6 +1,6 @@
 // src/main.ts
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import 'bootstrap-icons/font/bootstrap-icons.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import Sortable from 'sortablejs';
 import { Chart, registerables, type ChartConfiguration } from 'chart.js';
 import './style.css';
@@ -49,10 +49,6 @@ function createWidgetElement(widget: DashboardWidgetConfig): HTMLElement {
         // It uses Bootstrap Icons (bi-gear-fill) and has the class 'widget-configure-btn'
         // It does NOT directly use data-bs-toggle or data-bs-target here,
         // because the click is handled by JavaScript to call chartConfigPanel.open()
-        // configureButtonHtml = `
-        //     <i class="bi bi-gear-fill widget-configure-btn" role="button" title="Configure Widget"></i>
-        // `;
-        // a bootstrap small button with icon
         configureButtonHtml = `
             <button type="button" class="btn btn-sm btn-outline-secondary widget-configure-btn" title="Configure Widget">
                 <i class="bi bi-gear-fill"></i>
@@ -63,8 +59,9 @@ function createWidgetElement(widget: DashboardWidgetConfig): HTMLElement {
     widgetWrapper.innerHTML = `
         <div class="card h-100">
             <div class="card-header"> <!-- Bootstrap card-header -->
-                <h5 class="card-title mb-0">${widget.title}</h5>
-                ${configureButtonHtml} <!-- Inject the button HTML here -->
+                <h5 class="card-title mb-0">${widget.title}
+                    ${configureButtonHtml} <!-- Insert the button HTML here -->
+                </h5>
             </div>
             <div class="card-body d-flex flex-column">
                 ${widget.content ? `<p class="card-text">${widget.content}</p>` : ''}
@@ -172,38 +169,57 @@ function handlePanelApply(widgetId: string, updates: PanelWidgetUpdate): void {
 
     widgetToUpdate.title = updates.title;
 
-    if (widgetToUpdate.chartConfig) {
-        // Update first dataset
-        if (widgetToUpdate.chartConfig.data.datasets[0]) {
-            const dataset = widgetToUpdate.chartConfig.data.datasets[0];
-            if (updates.datasetLabel !== undefined) dataset.label = updates.datasetLabel;
+    if (widgetToUpdate.chartConfig && widgetToUpdate.chartConfig.data.datasets[0]) {
+        const chartConfig = widgetToUpdate.chartConfig;
+        const dataset = chartConfig.data.datasets[0];
 
-            if (updates.datasetBgColor !== undefined) {
-                 // Handle array vs single string for colors
-                if (Array.isArray(dataset.backgroundColor)) {
-                    dataset.backgroundColor[0] = updates.datasetBgColor;
-                } else {
-                    dataset.backgroundColor = updates.datasetBgColor;
-                }
+        if (updates.datasetLabel !== undefined) dataset.label = updates.datasetLabel;
+
+        // Ensure colors are arrays if we are styling a specific slice/bar
+        // or if the chart type typically uses arrays (pie/doughnut)
+        const needsColorArray = (chartConfig.type === 'pie' || chartConfig.type === 'doughnut') ||
+                                (updates.selectedColorIndex !== undefined && updates.selectedColorIndex >= 0);
+
+        if (needsColorArray) {
+            if (!Array.isArray(dataset.backgroundColor)) {
+                // Convert to array, repeating the single color or initializing with placeholders
+                const singleColor = dataset.backgroundColor || 'rgba(200, 200, 200, 0.5)'; // Default placeholder
+                dataset.backgroundColor = new Array(dataset.data?.length || 1).fill(singleColor);
             }
-            if (updates.datasetBorderColor !== undefined) {
-                if (Array.isArray(dataset.borderColor)) {
-                    dataset.borderColor[0] = updates.datasetBorderColor;
-                } else {
-                    dataset.borderColor = updates.datasetBorderColor;
-                }
+            if (!Array.isArray(dataset.borderColor)) {
+                const singleColor = dataset.borderColor || 'rgba(100, 100, 100, 1)'; // Default placeholder
+                dataset.borderColor = new Array(dataset.data?.length || 1).fill(singleColor);
             }
         }
 
-        // Update options
-        if (!widgetToUpdate.chartConfig.options) widgetToUpdate.chartConfig.options = {};
-        if (!widgetToUpdate.chartConfig.options.scales) widgetToUpdate.chartConfig.options.scales = {};
-        if (!widgetToUpdate.chartConfig.options.scales.y) widgetToUpdate.chartConfig.options.scales.y = {};
+        if (updates.selectedColorIndex !== undefined && updates.selectedColorIndex >= 0) {
+            // Apply to specific index
+            const idx = updates.selectedColorIndex;
+            if (Array.isArray(dataset.backgroundColor) && idx < dataset.backgroundColor.length) {
+                if (updates.datasetBgColor !== undefined) dataset.backgroundColor[idx] = updates.datasetBgColor;
+            }
+            if (Array.isArray(dataset.borderColor) && idx < dataset.borderColor.length) {
+                if (updates.datasetBorderColor !== undefined) dataset.borderColor[idx] = updates.datasetBorderColor;
+            }
+        } else {
+            // Apply as single color (or first element if it somehow became an array for a non-slice chart)
+            if (updates.datasetBgColor !== undefined) {
+                dataset.backgroundColor = Array.isArray(dataset.backgroundColor) ? [updates.datasetBgColor, ...dataset.backgroundColor.slice(1)] : updates.datasetBgColor;
+            }
+            if (updates.datasetBorderColor !== undefined) {
+                dataset.borderColor = Array.isArray(dataset.borderColor) ? [updates.datasetBorderColor, ...dataset.borderColor.slice(1)] : updates.datasetBorderColor;
+            }
+        }
+
+
+        if (!chartConfig.options) chartConfig.options = {};
+        if (!chartConfig.options.scales) chartConfig.options.scales = {};
+        if (!chartConfig.options.scales.y) chartConfig.options.scales.y = {};
 
         if (updates.yAxisBeginAtZero !== undefined &&
-            widgetToUpdate.chartConfig.type !== 'doughnut' &&
-            widgetToUpdate.chartConfig.type !== 'pie') {
-            widgetToUpdate.chartConfig.options.scales.y.beginAtZero = updates.yAxisBeginAtZero;
+            chartConfig.type !== 'doughnut' &&
+            chartConfig.type !== 'pie') {
+            chartConfig.options.scales.y.beginAtZero = updates.yAxisBeginAtZero;
         }
     }
 

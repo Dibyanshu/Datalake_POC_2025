@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/SphereWms.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite Drag & Drop Dashboard</title>
+    <title>Datalake POC</title>
 </head>
 <body>
     <div class="container-fluid mt-4">
-        <header class="mb-4 p-3 bg-light rounded">
-            <h1>My Custom Dashboard</h1>
-            <p>Drag and drop the widgets below to reorder them.</p>
+        <header class="mb-4 bg-light rounded">
+            <h1>Datalake custom dashboard</h1>
+            <p>Drag and drop widgets, or click the <i class="bi bi-gear-fill"></i> icon to configure charts.</p>
         </header>
 
         <div id="dashboard-grid" class="row g-3">
@@ -29,39 +29,41 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <!-- Form ID: 'widgetConfigForm' -->
             <form id="widgetConfigForm">
-                <!-- Hidden Input ID: 'configWidgetId' -->
                 <input type="hidden" id="configWidgetId">
 
                 <div class="mb-3">
                     <label for="configWidgetTitle" class="form-label">Widget Title</label>
-                    <!-- Input ID: 'configWidgetTitle' -->
                     <input type="text" class="form-control" id="configWidgetTitle" required>
                 </div>
 
-                <!-- Chart Specific Section ID: 'chartSpecificConfig' -->
                 <div id="chartSpecificConfig">
-                    <h6 class="mt-4 mb-3 border-bottom pb-2">Chart Settings (First Dataset)</h6>
+                    <h6 class="mt-4 mb-3 border-bottom pb-2">Chart Settings</h6>
                     <div class="mb-3">
-                        <label for="configDatasetLabel" class="form-label">Dataset Label</label>
-                        <!-- Input ID: 'configDatasetLabel' -->
+                        <label for="configDatasetLabel" class="form-label">Dataset Label (First Dataset)</label>
                         <input type="text" class="form-control" id="configDatasetLabel">
                     </div>
+
+                    <!-- NEW: Dropdown to select slice/bar -->
+                    <div class="mb-3" id="configSliceSelectorGroup" style="display: none;">
+                        <label for="configSliceIndex" class="form-label">Select Slice/Bar to Style:</label>
+                        <select class="form-select" id="configSliceIndex">
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+
                     <div class="mb-3">
                         <label for="configDatasetBgColor" class="form-label">Background Color</label>
-                        <!-- Input ID: 'configDatasetBgColor' -->
-                        <input type="text" class="form-control" id="configDatasetBgColor" placeholder="e.g., rgba(54, 162, 235, 0.6) or #36A2EB">
-                        <div class="form-text">For pie/doughnut, this sets the first slice color.</div>
+                        <input type="color" class="form-control" id="configDatasetBgColor" placeholder="e.g., rgba(54, 162, 235, 0.6) or #36A2EB">
+                        <div class="form-text" id="bgColorHelpText">For the selected slice/bar.</div>
                     </div>
-                     <div class="mb-3">
+                    <div class="mb-3">
                         <label for="configDatasetBorderColor" class="form-label">Border Color</label>
-                        <!-- Input ID: 'configDatasetBorderColor' -->
-                        <input type="text" class="form-control" id="configDatasetBorderColor" placeholder="e.g., rgba(54, 162, 235, 1) or #36A2EB">
-                        <div class="form-text">For pie/doughnut, this sets the first slice border.</div>
+                        <input type="color" class="form-control" id="configDatasetBorderColor" placeholder="e.g., rgba(54, 162, 235, 1) or #36A2EB">
+                        <div class="form-text" id="borderColorHelpText">For the selected slice/bar.</div>
                     </div>
-                    <div class="form-check mb-3">
-                        <!-- Input ID: 'configYAxisBeginAtZero' -->
+
+                    <div class="form-check mb-3" id="yAxisBeginAtZeroGroup">
                         <input class="form-check-input" type="checkbox" id="configYAxisBeginAtZero">
                         <label class="form-check-label" for="configYAxisBeginAtZero">
                             Y-Axis Begins at Zero (for Bar/Line charts)
