@@ -1,0 +1,48 @@
+{
+  "widget-analytics": {
+    "type": "bar",
+    "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+    "datasets": [{
+      "label": "# of Website Visits",
+      "data": [1250, 1980, 3100, 4900, 2400, 3300, 4100],
+      "backgroundColor": "rgba(54, 162, 235, 0.6)",
+      "borderColor": "rgba(54, 162, 235, 1)",
+      "borderWidth": 1
+    }]
+  },
+  "widget-sales": {
+    "type": "doughnut",
+    "labels": ["Electronics", "Books", "Apparel", "Home Goods", "Toys"],
+    "datasets": [{
+      "label": "Sales ($)",
+      "data": [350, 180, 220, 190, 120],
+      "backgroundColor": [
+        "rgba(255, 99, 132, 0.7)",
+        "rgba(54, 162, 235, 0.7)",
+        "rgba(255, 206, 86, 0.7)",
+        "rgba(75, 192, 192, 0.7)",
+        "rgba(153, 102, 255, 0.7)"
+      ],
+      "borderColor": [
+        "rgba(255, 99, 132, 1)",
+        "rgba(54, 162, 235, 1)",
+        "rgba(255, 206, 86, 1)",
+        "rgba(75, 192, 192, 1)",
+        "rgba(153, 102, 255, 1)"
+      ],
+      "borderWidth": 1
+    }]
+  },
+  "widget-server": {
+    "type": "line",
+    "labels": ["1PM", "2PM", "3PM", "4PM", "5PM", "6PM", "7PM"],
+    "datasets": [{
+      "label": "CPU Usage %",
+      "data": [25, 30, 28, 35, 32, 40, 38],
+      "borderColor": "rgb(255, 159, 64)",
+      "backgroundColor": "rgba(255, 159, 64, 0.3)",
+      "tension": 0.1,
+      "fill": true
+    }]
+  }
+}
