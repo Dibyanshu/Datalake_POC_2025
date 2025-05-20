@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite Drag & Drop Dashboard</title>
+</head>
+<body>
+    <div class="container-fluid mt-4">
+        <header class="mb-4 p-3 bg-light rounded">
+            <h1>My Custom Dashboard</h1>
+            <p>Drag and drop the widgets below to reorder them.</p>
+        </header>
+
+        <div id="dashboard-grid" class="row g-3">
+            <!-- Widgets will be rendered here by TypeScript -->
+        </div>
+
+        <footer class="mt-5 text-center text-muted">
+            <p>Configuration is saved locally.</p>
+        </footer>
+    </div>
+    <!-- Configuration Offcanvas Panel -->
+    <!-- The main ID 'configPanel' is used when instantiating ChartConfigPanel -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="configPanel" aria-labelledby="configPanelLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="configPanelLabel">Configure Widget</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <!-- Form ID: 'widgetConfigForm' -->
+            <form id="widgetConfigForm">
+                <!-- Hidden Input ID: 'configWidgetId' -->
+                <input type="hidden" id="configWidgetId">
+
+                <div class="mb-3">
+                    <label for="configWidgetTitle" class="form-label">Widget Title</label>
+                    <!-- Input ID: 'configWidgetTitle' -->
+                    <input type="text" class="form-control" id="configWidgetTitle" required>
+                </div>
+
+                <!-- Chart Specific Section ID: 'chartSpecificConfig' -->
+                <div id="chartSpecificConfig">
+                    <h6 class="mt-4 mb-3 border-bottom pb-2">Chart Settings (First Dataset)</h6>
+                    <div class="mb-3">
+                        <label for="configDatasetLabel" class="form-label">Dataset Label</label>
+                        <!-- Input ID: 'configDatasetLabel' -->
+                        <input type="text" class="form-control" id="configDatasetLabel">
+                    </div>
+                    <div class="mb-3">
+                        <label for="configDatasetBgColor" class="form-label">Background Color</label>
+                        <!-- Input ID: 'configDatasetBgColor' -->
+                        <input type="text" class="form-control" id="configDatasetBgColor" placeholder="e.g., rgba(54, 162, 235, 0.6) or #36A2EB">
+                        <div class="form-text">For pie/doughnut, this sets the first slice color.</div>
+                    </div>
+                     <div class="mb-3">
+                        <label for="configDatasetBorderColor" class="form-label">Border Color</label>
+                        <!-- Input ID: 'configDatasetBorderColor' -->
+                        <input type="text" class="form-control" id="configDatasetBorderColor" placeholder="e.g., rgba(54, 162, 235, 1) or #36A2EB">
+                        <div class="form-text">For pie/doughnut, this sets the first slice border.</div>
+                    </div>
+                    <div class="form-check mb-3">
+                        <!-- Input ID: 'configYAxisBeginAtZero' -->
+                        <input class="form-check-input" type="checkbox" id="configYAxisBeginAtZero">
+                        <label class="form-check-label" for="configYAxisBeginAtZero">
+                            Y-Axis Begins at Zero (for Bar/Line charts)
+                        </label>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+                <button type="submit" class="btn btn-primary me-2">Apply Changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+            </form>
+        </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

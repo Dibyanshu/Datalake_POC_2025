@@ -1,0 +1,40 @@
+/* src/style.css */
+body {
+    font-family: sans-serif;
+    background-color: #f8f9fa; /* Light gray background for better contrast */
+}
+
+.dashboard-widget {
+    cursor: grab;
+    transition: transform 0.2s ease-out;
+}
+
+.dashboard-widget .card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); /* Subtle shadow for cards */
+}
+
+.dashboard-widget .card-header {
+    cursor: move;
+    background-color: #e9ecef; /* Lighter header background */
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* SortableJS ghost class */
+.sortable-ghost {
+    opacity: 0.4;
+    background-color: #c8ebfb;
+    border: 1px dashed #007bff;
+}
+
+/* Ensure cards in the same row try to take equal height if content varies */
+/* .dashboard-widget .card is already h-100 in JS */
+
+/* Space between card text and chart container if both exist */
+.card-body > .card-text + .chart-container {
+    margin-top: 1rem;
+}
+
+.chart-container {
+    /* height and width are set inline for now,
+       could be classes if you have standard chart sizes */
+}

@@ -1,0 +1,22 @@
+{
+  "name": "vite-ts-datalake-dashboard",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/bootstrap": "^5.2.10",
+    "@types/sortablejs": "^1.15.8",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.6",
+    "chart.js": "^4.4.9",
+    "sortablejs": "^1.15.6"
+  }
+}
