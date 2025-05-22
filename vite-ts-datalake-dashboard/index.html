@@ -11,6 +11,42 @@
         <header class="mb-4 bg-light rounded">
             <h1>Datalake custom dashboard</h1>
             <p>Drag and drop widgets, or click the <i class="bi bi-gear-fill"></i> icon to configure charts.</p>
+        <div class="container">
+            <div class="row align-items-start mb-3">
+                <div class="col">
+                    <select id="ddReports" class="form-select form-select-sm mb-3">
+                        <option value="" selected disabled>Select a report to add</option>
+                        <option value="inbound">Inbound Report</option>
+                        <option value="outbound">Outbound Report</option>
+                        <option value="inventory">Inventory Report</option>
+                        <option value="sales">Sales Report</option>
+                        <option value="returns">Returns Report</option>
+                        <option value="picking">Picking Report</option>
+                        <option value="packing">Packing Report</option>
+                        <option value="shipping">Shipping Report</option>
+                        <option value="receiving">Receiving Report</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <select id="ddFilters" class="form-select form-select-sm mb-3">
+                        <option value="" selected disabled>Select a filter</option>
+                        <option value="stDate">Start date</option>
+                        <option value="endDate">End date</option>
+                        <option value="location">Location</option>
+                        <option value="product">Product</option>
+                        <option value="category">Category</option>
+                        <option value="supplier">Supplier</option>
+                        <option value="customer">Customer</option>
+                        <option value="status">Status</option>
+                        <option value="priority">Priority</option>
+                        <option value="quantity">Quantity</option>
+                        <option value="weight">Weight</option>
+                        <option value="volume">Volume</option>
+                        <option value="cost">Cost</option>
+                    </select>
+                </div>
+            </div>
+        </div>
         </header>
 
         <div id="dashboard-grid" class="row g-3">
